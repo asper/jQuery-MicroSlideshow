@@ -25,11 +25,11 @@
           timer: null,
           slides: $el.children(),
             options : $.extend({
-            autoplay: true,
-            duration: 1500,
-            delay: 5000,
-            transition: 'fade'
-          }, options)
+              autoplay: true,
+              duration: 1500,
+              delay: 5000,
+              transition: 'fade'
+            }, options)
         };
         data.microslideshow.slides.each(function(slideIndex, slide){
           if(slideIndex){
@@ -93,24 +93,51 @@
         if('fade' == data.microslideshow.options.transition){
           $slide.css('opacity', 0);
           $slide.appendTo($el);
-          $slide.animate({opacity: 1}, {complete: function(){
-            $current.detach();
-            data.microslideshow.current = slideNumber;
-            $el.trigger('microslideshow.afterShow');
-          }});
+          $slide.animate(
+            {
+              opacity: 1
+            }, 
+            {
+              duration: data.microslideshow.options.duration,
+              complete: function(){
+                $current.detach();
+                data.microslideshow.current = slideNumber;
+                $el.trigger('microslideshow.afterShow');
+              }
+            }
+          );
         } else if('slide_left' == data.microslideshow.options.transition) {
           $slide.css({
             opacity: 0,
             left: '100%'
           });
           $slide.appendTo($el);
-          $current.animate({left: '-100%', opacity: 0}, {queue: false});
-          $slide.animate({left: 0, opacity: 1}, {queue: false, complete: function(){
-            $current.detach();
-            $slide.css('left', 0);
-            data.microslideshow.current = slideNumber;
-            $el.trigger('microslideshow.afterShow');
-          }});
+          $current.animate(
+            {
+              left: '-100%', 
+              opacity: 0
+            }, 
+            {
+              duration: data.microslideshow.options.duration, 
+              queue: false
+            }
+          );
+          $slide.animate(
+            {
+              left: 0, 
+              opacity: 1
+            }, 
+            {
+              duration: data.microslideshow.options.duration, 
+              queue: false, 
+              complete: function(){
+                $current.detach();
+                $slide.css('left', 0);
+                data.microslideshow.current = slideNumber;
+                $el.trigger('microslideshow.afterShow');
+              }
+            }
+          );
         }
       } else if(action == 'slide') {
         
